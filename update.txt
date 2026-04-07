@@ -1,0 +1,20 @@
+<blockquote><b>⬡═―—⊱ ⎧ XILENT DEATH ⎭ ⊰―—═⬡</b></blockquote><b>📢 NEW UPDATE INFO</b>
+
+⚡ Sistem bot telah diperbarui ke versi terbaru.
+
+<b>🔧 Update Feature:</b>
+𖤓 Multi Sender Support (hingga ratusan sender)
+𖤓 Command <code>/addbot</code> pairing WhatsApp
+𖤓 Command <code>/addgb</code> untuk menambah bot ke grup
+𖤓 Sistem koneksi otomatis reconnect
+𖤓 Stabilitas bug sending ditingkatkan
+
+<b>🚀 Improvement:</b>
+𖤓 Performa bot lebih cepat
+𖤓 Sistem pairing lebih stabil
+𖤓 Error handling lebih aman
+
+<b>📦 Version:</b> 1.0.1
+<b>👨‍💻 Developer:</b> @gaponback
+
+<blockquote><b>⟢ XILENT DEATH SYSTEM ACTIVE</b></blockquote>
