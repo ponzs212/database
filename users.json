@@ -1,13 +1,6 @@
 {
   "users": [
     {
-      "id": "",
-      "username": "",
-      "password": "",
-      "role": "partner",
-      "created_by": "dev"
-    },
-    {
       "id": "7440874718",
       "username": "gaponnieh",
       "password": "xchange",
