@@ -13,6 +13,13 @@
       "password": "xchange",
       "role": "reseller",
       "created_by": "dev"
+    },
+    {
+      "id": "7440874718",
+      "username": "ulengg",
+      "password": "ulengg",
+      "role": "partner",
+      "created_by": "dev"
     }
   ]
 }
