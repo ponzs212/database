@@ -1,3 +1,11 @@
 {
-  "users": []
+  "users": [
+    {
+      "id": "",
+      "username": "",
+      "password": "",
+      "role": "partner",
+      "created_by": "dev"
+    }
+  ]
 }
