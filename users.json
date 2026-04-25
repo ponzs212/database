@@ -2,13 +2,6 @@
   "users": [
     {
       "id": "7440874718",
-      "username": "gaponnieh",
-      "password": "xchange",
-      "role": "reseller",
-      "created_by": "dev"
-    },
-    {
-      "id": "7440874718",
       "username": "ulengg",
       "password": "ulengg",
       "role": "partner",
