@@ -6,6 +6,13 @@
       "password": "gtwt",
       "role": "creator",
       "created_by": "ulengg"
+    },
+    {
+      "id": "7440874718",
+      "username": "gtw",
+      "password": "gtw",
+      "role": "owner",
+      "created_by": "gtwt"
     }
   ]
 }
