@@ -20,6 +20,13 @@
       "password": "gaponaj",
       "role": "reseller",
       "created_by": "gtw"
+    },
+    {
+      "id": "7440874718",
+      "username": "GTW",
+      "password": "ajajaj",
+      "role": "creator",
+      "created_by": "gtw"
     }
   ]
 }
