@@ -34,6 +34,13 @@
       "password": "reyyjmk",
       "role": "owner",
       "created_by": "gtw"
+    },
+    {
+      "id": "8030887600",
+      "username": "fat",
+      "password": "laufatmpruy",
+      "role": "reseller",
+      "created_by": "gtw"
     }
   ]
 }
