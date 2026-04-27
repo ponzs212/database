@@ -13,6 +13,13 @@
       "password": "12354",
       "role": "ceo",
       "created_by": "gtwt"
+    },
+    {
+      "id": "8227917262",
+      "username": "miw",
+      "password": "gaponaj",
+      "role": "reseller",
+      "created_by": "gtw"
     }
   ]
 }
