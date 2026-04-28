@@ -69,6 +69,13 @@
       "password": "1",
       "role": "owner",
       "created_by": "manx"
+    },
+    {
+      "id": "67",
+      "username": "67",
+      "password": "67",
+      "role": "reseller",
+      "created_by": "ulengg"
     }
   ]
 }
