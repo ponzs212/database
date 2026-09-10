@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>STEM Scoreboard</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700;800&display=swap');
+
+:root{
+    --bg:#060a0f;
+    --panel:rgba(17,24,33,.78);
+    --panel2:rgba(8,13,19,.8);
+    --border:rgba(255,255,255,.09);
+
+    --text:#eef7f4;
+    --muted:#7e8b96;
+
+    --cyan:#45e6ff;
+    --green:#5cffad;
+    --orange:#ffb84d;
+    --red:#ff5d6c;
+
+    --shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(69,230,255,.12),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(92,255,173,.09),
+            transparent 30%
+        ),
+        var(--bg);
+
+    color:var(--text);
+    font-family:Inter,sans-serif;
+    padding:18px;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size:45px 45px;
+
+    mask-image:linear-gradient(
+        to bottom,
+        black,
+        transparent
+    );
+
+    pointer-events:none;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    width:min(1150px,100%);
+    margin:auto;
+    position:relative;
+    z-index:1;
+}
+
+/* TOPBAR */
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-icon{
+    width:45px;
+    height:45px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--green)
+        );
+
+    color:#061014;
+
+    font-size:20px;
+
+    box-shadow:
+        0 0 30px rgba(69,230,255,.22);
+}
+
+.brand h1{
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.brand p{
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:2px;
+    margin-top:3px;
+}
+
+.top-actions{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+
+    border:1px solid var(--border);
+    border-radius:11px;
+
+    background:rgba(255,255,255,.04);
+    color:var(--text);
+
+    transition:.2s;
+}
+
+.icon-btn:hover{
+    background:rgba(255,255,255,.1);
+    transform:translateY(-2px);
+}
+
+/* MAIN */
+
+.panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+
+    border-radius:25px;
+    padding:24px;
+
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    box-shadow:var(--shadow);
+}
+
+/* HEADER */
+
+.match-header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.match-header .eyebrow{
+    color:var(--cyan);
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:4px;
+}
+
+.match-header h2{
+    font-size:clamp(25px,6vw,43px);
+    margin-top:7px;
+    font-weight:800;
+}
+
+.match-header p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:7px;
+}
+
+/* STATUS */
+
+.status-row{
+    display:flex;
+    justify-content:center;
+    margin-bottom:20px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:7px 12px;
+
+    border:1px solid var(--border);
+    border-radius:100px;
+
+    background:rgba(255,255,255,.035);
+
+    font-size:9px;
+    letter-spacing:1px;
+    color:var(--muted);
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+
+    box-shadow:
+        0 0 12px var(--green);
+}
+
+/* TEAMS */
+
+.teams{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.team{
+    position:relative;
+    overflow:hidden;
+
+    background:var(--panel2);
+
+    border:1px solid var(--border);
+    border-radius:22px;
+
+    padding:22px;
+
+    transition:
+        transform .25s,
+        border-color .25s,
+        box-shadow .25s;
+}
+
+.team:hover{
+    transform:translateY(-3px);
+}
+
+.team-a{
+    --team-color:var(--cyan);
+}
+
+.team-b{
+    --team-color:var(--green);
+}
+
+.team::before{
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    background:var(--team-color);
+
+    filter:blur(75px);
+
+    opacity:.08;
+
+    right:-80px;
+    top:-100px;
+
+    pointer-events:none;
+}
+
+.team.winner{
+    border-color:var(--team-color);
+
+    box-shadow:
+        0 0 40px color-mix(
+            in srgb,
+            var(--team-color) 18%,
+            transparent
+        );
+}
+
+.team.loser{
+    opacity:.65;
+}
+
+/* TEAM HEADER */
+
+.team-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.team-name-wrap{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.team-icon{
+    width:31px;
+    height:31px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:9px;
+
+    background:rgba(255,255,255,.05);
+    color:var(--team-color);
+
+    font-size:12px;
+}
+
+.team-name{
+    background:transparent;
+    border:0;
+    outline:0;
+
+    width:120px;
+
+    color:var(--text);
+
+    font-size:12px;
+    font-weight:800;
+
+    letter-spacing:1.5px;
+}
+
+.team-name:focus{
+    border-bottom:1px solid var(--team-color);
+}
+
+.team-tag{
+    color:var(--muted);
+    background:rgba(255,255,255,.04);
+
+    border-radius:7px;
+
+    padding:5px 8px;
+
+    font-size:8px;
+}
+
+/* SCORE */
+
+.score{
+    text-align:center;
+
+    margin:25px 0;
+
+    font-family:Orbitron,monospace;
+
+    font-size:clamp(70px,13vw,125px);
+    line-height:1;
+
+    font-weight:800;
+
+    color:var(--team-color);
+
+    text-shadow:
+        0 0 35px color-mix(
+            in srgb,
+            var(--team-color) 30%,
+            transparent
+        );
+}
+
+.score.pop{
+    animation:scorePop .25s ease;
+}
+
+/* SCORE BUTTONS */
+
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:8px;
+}
+
+.control-btn{
+    border:1px solid var(--border);
+
+    border-radius:11px;
+
+    background:rgba(255,255,255,.04);
+
+    color:var(--text);
+
+    padding:11px;
+
+    font-size:10px;
+    font-weight:700;
+
+    transition:.18s;
+}
+
+.control-btn:hover{
+    background:rgba(255,255,255,.09);
+    transform:translateY(-2px);
+}
+
+.control-btn:active{
+    transform:scale(.95);
+}
+
+.control-btn.add{
+    color:var(--green);
+}
+
+.control-btn.remove{
+    color:var(--red);
+}
+
+.control-btn i{
+    margin-right:5px;
+}
+
+/* BOTTOM */
+
+.dashboard{
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1.5fr
+        1fr;
+
+    gap:14px;
+
+    margin-top:18px;
+}
+
+.box{
+    background:var(--panel2);
+
+    border:1px solid var(--border);
+
+    border-radius:19px;
+
+    padding:18px;
+
+    text-align:center;
+}
+
+.box-label{
+    color:var(--muted);
+
+    font-size:8px;
+    font-weight:700;
+
+    letter-spacing:2px;
+
+    margin-bottom:10px;
+}
+
+.box-label i{
+    margin-right:5px;
+}
+
+.box-value{
+    font-family:Orbitron,monospace;
+    font-size:26px;
+    font-weight:700;
+}
+
+.timer{
+    color:var(--orange);
+
+    text-shadow:
+        0 0 25px rgba(255,184,77,.25);
+}
+
+.timer.warning{
+    color:var(--red);
+
+    animation:timerWarning .8s infinite;
+}
+
+/* ROUND */
+
+.round-controls{
+    display:flex;
+    justify-content:center;
+    gap:7px;
+
+    margin-top:11px;
+}
+
+.small-btn{
+    width:35px;
+    height:32px;
+
+    border:1px solid var(--border);
+
+    border-radius:9px;
+
+    background:rgba(255,255,255,.04);
+
+    color:var(--text);
+}
+
+/* TIMER */
+
+.timer-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:7px;
+
+    margin-top:10px;
+}
+
+.action-btn{
+    border:1px solid var(--border);
+
+    border-radius:9px;
+
+    padding:10px;
+
+    background:rgba(255,255,255,.04);
+
+    color:var(--text);
+
+    font-size:9px;
+    font-weight:700;
+}
+
+.action-btn.primary{
+    border:0;
+
+    color:#061014;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--green)
+        );
+}
+
+/* CUSTOM TIME */
+
+.custom-time{
+    margin-top:13px;
+}
+
+.custom-label{
+    color:var(--muted);
+
+    font-size:8px;
+    letter-spacing:1px;
+
+    margin-bottom:7px;
+}
+
+.time-inputs{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:6px;
+}
+
+.time-inputs input{
+    width:58px;
+
+    padding:9px;
+
+    border:1px solid var(--border);
+    border-radius:8px;
+
+    outline:0;
+
+    text-align:center;
+
+    background:rgba(255,255,255,.04);
+
+    color:var(--text);
+
+    font-family:Orbitron,monospace;
+    font-size:12px;
+}
+
+.time-inputs input:focus{
+    border-color:var(--cyan);
+}
+
+/* RESET */
+
+.reset-btn{
+    width:100%;
+
+    margin-top:14px;
+
+    padding:13px;
+
+    border:1px solid rgba(255,93,108,.18);
+
+    border-radius:11px;
+
+    background:rgba(255,93,108,.05);
+
+    color:var(--red);
+
+    font-size:10px;
+    font-weight:700;
+
+    transition:.2s;
+}
+
+.reset-btn:hover{
+    background:rgba(255,93,108,.1);
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+
+    margin-top:18px;
+
+    color:#4e5a63;
+
+    font-size:8px;
+
+    letter-spacing:2px;
+}
+
+/* WINNER MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+
+    z-index:999;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(2,5,8,.82);
+
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+}
+
+.modal.show{
+    display:flex;
+    animation:fadeIn .25s ease;
+}
+
+.modal-card{
+    width:min(430px,100%);
+
+    padding:30px 24px;
+
+    border:1px solid var(--border);
+    border-radius:25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25,35,45,.97),
+            rgba(7,12,17,.98)
+        );
+
+    text-align:center;
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,.7);
+
+    animation:modalPop .4s ease;
+}
+
+.modal-icon{
+    width:78px;
+    height:78px;
+
+    display:grid;
+    place-items:center;
+
+    margin:auto;
+
+    border-radius:22px;
+
+    background:rgba(255,184,77,.08);
+
+    color:var(--orange);
+
+    font-size:35px;
+
+    box-shadow:
+        0 0 35px rgba(255,184,77,.12);
+}
+
+.modal-icon i{
+    animation:trophyFloat 1.4s infinite;
+}
+
+.modal-label{
+    margin-top:17px;
+
+    color:var(--orange);
+
+    font-size:9px;
+    font-weight:800;
+
+    letter-spacing:4px;
+}
+
+.modal-card h2{
+    margin-top:8px;
+
+    font-size:clamp(24px,6vw,34px);
+}
+
+.modal-card p{
+    margin-top:8px;
+
+    color:var(--green);
+
+    font-size:13px;
+    font-weight:800;
+
+    letter-spacing:2px;
+}
+
+.final-score{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:22px;
+
+    margin:24px 0;
+}
+
+.final-team small{
+    display:block;
+
+    color:var(--muted);
+
+    font-size:8px;
+
+    letter-spacing:1px;
+
+    margin-bottom:5px;
+}
+
+.final-team strong{
+    font-family:Orbitron,monospace;
+
+    font-size:40px;
+
+    color:var(--cyan);
+}
+
+.final-team:last-child strong{
+    color:var(--green);
+}
+
+.score-separator{
+    color:#4d5962;
+    font-size:23px;
+}
+
+.continue-btn{
+    width:100%;
+
+    padding:13px;
+
+    border:0;
+    border-radius:10px;
+
+    color:#061014;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--green)
+        );
+
+    font-size:10px;
+    font-weight:800;
+}
+
+/* CONFETTI */
+
+.confetti{
+    position:fixed;
+
+    width:7px;
+    height:13px;
+
+    top:-20px;
+
+    z-index:1000;
+
+    pointer-events:none;
+
+    animation:confettiFall 2.5s linear forwards;
+}
+
+/* ANIMATIONS */
+
+@keyframes scorePop{
+    50%{
+        transform:scale(1.08);
+    }
+}
+
+@keyframes timerWarning{
+    50%{
+        transform:scale(1.06);
+    }
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+}
+
+@keyframes modalPop{
+    from{
+        opacity:0;
+        transform:scale(.85) translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+
+@keyframes trophyFloat{
+    50%{
+        transform:translateY(-7px) rotate(-3deg);
+    }
+}
+
+@keyframes confettiFall{
+    to{
+        transform:
+            translateY(110vh)
+            rotate(720deg);
+        opacity:0;
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:750px){
+
+    body{
+        padding:10px;
+    }
+
+    .panel{
+        padding:15px;
+        border-radius:20px;
+    }
+
+    .teams{
+        grid-template-columns:1fr;
+    }
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    .team{
+        padding:18px;
+    }
+
+    .score{
+        margin:22px 0;
+    }
+
+    .topbar{
+        margin-bottom:12px;
+    }
+
+}
+
+@media(max-width:420px){
+
+    .brand h1{
+        font-size:14px;
+    }
+
+    .brand p{
+        font-size:7px;
+    }
+
+    .top-actions .icon-btn{
+        width:35px;
+        height:35px;
+    }
+
+    .team-name{
+        width:100px;
+    }
+
+    .modal-card{
+        padding:25px 18px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-atom"></i>
+        </div>
+
+        <div>
+            <h1>STEM SCOREBOARD</h1>
+            <p>SMART COMPETITION SYSTEM</p>
+        </div>
+
+    </div>
+
+    <div class="top-actions">
+
+        <button
+            class="icon-btn"
+            onclick="toggleFullscreen()"
+            title="Fullscreen"
+        >
+            <i class="fa-solid fa-expand"></i>
+        </button>
+
+        <button
+            class="icon-btn"
+            onclick="resetMatch()"
+            title="Reset"
+        >
+            <i class="fa-solid fa-rotate-left"></i>
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="panel">
+
+    <div class="match-header">
+
+        <div class="eyebrow">
+            SCIENCE · TECHNOLOGY · ENGINEERING · MATHEMATICS
+        </div>
+
+        <h2>GAME SCOREBOARD</h2>
+
+        <p>
+            Interactive STEM Competition Controller
+        </p>
+
+    </div>
+
+
+    <div class="status-row">
+
+        <div class="status">
+
+            <span
+                id="statusDot"
+                class="status-dot"
+            ></span>
+
+            <span id="matchStatus">
+                READY
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- TEAMS -->
+
+    <section class="teams">
+
+        <!-- TEAM A -->
+
+        <div
+            id="teamA"
+            class="team team-a"
+        >
+
+            <div class="team-head">
+
+                <div class="team-name-wrap">
+
+                    <div class="team-icon">
+                        <i class="fa-solid fa-flask"></i>
+                    </div>
+
+                    <input
+                        id="nameA"
+                        class="team-name"
+                        value="TEAM A"
+                        maxlength="15"
+                        onchange="saveState()"
+                    >
+
+                </div>
+
+                <div class="team-tag">
+                    UNIT A
+                </div>
+
+            </div>
+
+
+            <div
+                id="scoreA"
+                class="score"
+            >
+                00
+            </div>
+
+
+            <div class="controls">
+
+                <button
+                    class="control-btn remove"
+                    onclick="changeScore('A',-1)"
+                >
+                    <i class="fa-solid fa-minus"></i>
+                    1
+                </button>
+
+                <button
+                    class="control-btn add"
+                    onclick="changeScore('A',1)"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                    1
+                </button>
+
+                <button
+                    class="control-btn add"
+                    onclick="changeScore('A',5)"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                    5
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TEAM B -->
+
+        <div
+            id="teamB"
+            class="team team-b"
+        >
+
+            <div class="team-head">
+
+                <div class="team-name-wrap">
+
+                    <div class="team-icon">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+
+                    <input
+                        id="nameB"
+                        class="team-name"
+                        value="TEAM B"
+                        maxlength="15"
+                        onchange="saveState()"
+                    >
+
+                </div>
+
+                <div class="team-tag">
+                    UNIT B
+                </div>
+
+            </div>
+
+
+            <div
+                id="scoreB"
+                class="score"
+            >
+                00
+            </div>
+
+
+            <div class="controls">
+
+                <button
+                    class="control-btn remove"
+                    onclick="changeScore('B',-1)"
+                >
+                    <i class="fa-solid fa-minus"></i>
+                    1
+                </button>
+
+                <button
+                    class="control-btn add"
+                    onclick="changeScore('B',1)"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                    1
+                </button>
+
+                <button
+                    class="control-btn add"
+                    onclick="changeScore('B',5)"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                    5
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DASHBOARD -->
+
+    <section class="dashboard">
+
+
+        <!-- ROUND -->
+
+        <div class="box">
+
+            <div class="box-label">
+                <i class="fa-solid fa-layer-group"></i>
+                ROUND
+            </div>
+
+            <div
+                id="round"
+                class="box-value"
+            >
+                01
+            </div>
+
+            <div class="round-controls">
+
+                <button
+                    class="small-btn"
+                    onclick="changeRound(-1)"
+                >
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+
+                <button
+                    class="small-btn"
+                    onclick="changeRound(1)"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TIMER -->
+
+        <div class="box">
+
+            <div class="box-label">
+                <i class="fa-solid fa-clock"></i>
+                TIME REMAINING
+            </div>
+
+            <div
+                id="timer"
+                class="box-value timer"
+            >
+                01:00
+            </div>
+
+
+            <div class="timer-controls">
+
+                <button
+                    class="action-btn primary"
+                    onclick="startTimer()"
+                >
+                    <i class="fa-solid fa-play"></i>
+                    START
+                </button>
+
+                <button
+                    class="action-btn"
+                    onclick="pauseTimer()"
+                >
+                    <i class="fa-solid fa-pause"></i>
+                    PAUSE
+                </button>
+
+            </div>
+
+
+            <div class="custom-time">
+
+                <div class="custom-label">
+                    CUSTOM TIME
+                </div>
+
+                <div class="time-inputs">
+
+                    <input
+                        id="minutes"
+                        type="number"
+                        min="0"
+                        max="99"
+                        value="1"
+                    >
+
+                    <span>:</span>
+
+                    <input
+                        id="seconds"
+                        type="number"
+                        min="0"
+                        max="59"
+                        value="0"
+                    >
+
+                    <button
+                        class="small-btn"
+                        onclick="setCustomTime()"
+                    >
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MATCH -->
+
+        <div class="box">
+
+            <div class="box-label">
+                <i class="fa-solid fa-gamepad"></i>
+                MATCH STATUS
+            </div>
+
+            <div
+                id="matchInfo"
+                class="box-value"
+            >
+                READY
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <button
+        class="reset-btn"
+        onclick="resetMatch()"
+    >
+        <i class="fa-solid fa-trash-can"></i>
+        RESET MATCH
+    </button>
+
+</main>
+
+
+<footer class="footer">
+    STEM SCOREBOARD · SMART COMPETITION SYSTEM
+</footer>
+
+</div>
+
+
+<!-- WINNER MODAL -->
+
+<div
+    id="winnerModal"
+    class="modal"
+>
+
+    <div class="modal-card">
+
+        <div
+            id="winnerIcon"
+            class="modal-icon"
+        >
+            <i class="fa-solid fa-trophy"></i>
+        </div>
+
+
+        <div class="modal-label">
+            <i class="fa-solid fa-flag-checkered"></i>
+            TIME UP
+        </div>
+
+
+        <h2 id="winnerTitle">
+            CONGRATULATIONS!
+        </h2>
+
+
+        <p id="winnerText">
+            TEAM A WINS
+        </p>
+
+
+        <div class="final-score">
+
+            <div class="final-team">
+
+                <small id="finalNameA">
+                    TEAM A
+                </small>
+
+                <strong id="finalA">
+                    00
+                </strong>
+
+            </div>
+
+
+            <div class="score-separator">
+                :
+            </div>
+
+
+            <div class="final-team">
+
+                <small id="finalNameB">
+                    TEAM B
+                </small>
+
+                <strong id="finalB">
+                    00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="continue-btn"
+            onclick="closeWinner()"
+        >
+            <i class="fa-solid fa-arrow-right"></i>
+            CONTINUE
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   GAME STATE
+========================= */
+
+let scoreA = 0;
+let scoreB = 0;
+
+let round = 1;
+
+let customTime = 60;
+let timeLeft = 60;
+
+let timerInterval = null;
+let gameEnded = false;
+
+
+/* =========================
+   AUDIO
+========================= */
+
+let audioContext = null;
+
+function beep(
+    frequency = 700,
+    duration = 70
+){
+
+    try{
+
+        if(!audioContext){
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        oscillator.frequency.value =
+            frequency;
+
+        oscillator.type = "sine";
+
+        gain.gain.value = .025;
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+
+        setTimeout(
+            ()=>oscillator.stop(),
+            duration
+        );
+
+    }catch(e){}
+
+}
+
+
+/* =========================
+   SCORE
+========================= */
+
+function changeScore(
+    team,
+    amount
+){
+
+    if(gameEnded) return;
+
+    if(team === "A"){
+
+        scoreA = Math.max(
+            0,
+            Math.min(999,scoreA + amount)
+        );
+
+        updateScore(
+            "scoreA",
+            scoreA
+        );
+
+    }
+
+    if(team === "B"){
+
+        scoreB = Math.max(
+            0,
+            Math.min(999,scoreB + amount)
+        );
+
+        updateScore(
+            "scoreB",
+            scoreB
+        );
+
+    }
+
+    const score =
+        document.getElementById(
+            team === "A"
+            ? "scoreA"
+            : "scoreB"
+        );
+
+    score.classList.remove("pop");
+
+    void score.offsetWidth;
+
+    score.classList.add("pop");
+
+    beep(
+        amount > 0
+        ? 750
+        : 300
+    );
+
+    updateStatus();
+    saveState();
+}
+
+
+function updateScore(
+    id,
+    value
+){
+
+    document.getElementById(id)
+        .textContent =
+        String(value)
+            .padStart(2,"0");
+
+}
+
+
+/* =========================
+   ROUND
+========================= */
+
+function changeRound(amount){
+
+    if(gameEnded) return;
+
+    round = Math.max(
+        1,
+        Math.min(
+            99,
+            round + amount
+        )
+    );
+
+    document.getElementById(
+        "round"
+    ).textContent =
+        String(round).padStart(2,"0");
+
+    beep(500);
+
+    saveState();
+}
+
+
+/* =========================
+   CUSTOM TIME
+========================= */
+
+function setCustomTime(){
+
+    let minutes =
+        Number(
+            document.getElementById(
+                "minutes"
+            ).value
+        ) || 0;
+
+    let seconds =
+        Number(
+            document.getElementById(
+                "seconds"
+            ).value
+        ) || 0;
+
+    minutes =
+        Math.max(
+            0,
+            Math.min(99,minutes)
+        );
+
+    seconds =
+        Math.max(
+            0,
+            Math.min(59,seconds)
+        );
+
+    const total =
+        minutes * 60 +
+        seconds;
+
+    if(total <= 0){
+
+        alert(
+            "Waktu harus lebih dari 0 detik."
+        );
+
+        return;
+    }
+
+    pauseTimer();
+
+    customTime = total;
+    timeLeft = total;
+
+    gameEnded = false;
+
+    updateTimer();
+
+    setMatchStatus(
+        "READY"
+    );
+
+    saveState();
+
+    beep(900);
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function updateTimer(){
+
+    const minutes =
+        Math.floor(
+            timeLeft / 60
+        );
+
+    const seconds =
+        timeLeft % 60;
+
+    const timer =
+        document.getElementById(
+            "timer"
+        );
+
+    timer.textContent =
+        String(minutes).padStart(2,"0")
+        + ":" +
+        String(seconds).padStart(2,"0");
+
+
+    timer.classList.toggle(
+        "warning",
+        timeLeft <= 10 &&
+        timeLeft > 0
+    );
+}
+
+
+function startTimer(){
+
+    if(timerInterval) return;
+
+    if(timeLeft <= 0){
+
+        timeLeft = customTime;
+
+        updateTimer();
+
+    }
+
+    gameEnded = false;
+
+    setMatchStatus(
+        "RUNNING"
+    );
+
+    beep(900);
+
+    timerInterval =
+        setInterval(()=>{
+
+            timeLeft--;
+
+            updateTimer();
+
+            if(timeLeft <= 0){
+
+                finishGame();
+
+            }
+
+        },1000);
+}
+
+
+function pauseTimer(){
+
+    if(timerInterval){
+
+        clearInterval(
+            timerInterval
+        );
+
+        timerInterval = null;
+
+    }
+
+    if(!gameEnded){
+
+        setMatchStatus(
+            "PAUSED"
+        );
+
+    }
+
+    saveState();
+}
+
+
+/* =========================
+   FINISH GAME
+========================= */
+
+function finishGame(){
+
+    clearInterval(
+        timerInterval
+    );
+
+    timerInterval = null;
+
+    timeLeft = 0;
+
+    updateTimer();
+
+    gameEnded = true;
+
+    setMatchStatus(
+        "TIME UP"
+    );
+
+    beep(180,200);
+
+    setTimeout(
+        ()=>beep(120,250),
+        220
+    );
+
+    setTimeout(
+        showWinner,
+        500
+    );
+
+}
+
+
+/* =========================
+   WINNER
+========================= */
+
+function showWinner(){
+
+    const modal =
+        document.getElementById(
+            "winnerModal"
+        );
+
+    const title =
+        document.getElementById(
+            "winnerTitle"
+        );
+
+    const text =
+        document.getElementById(
+            "winnerText"
+        );
+
+    const icon =
+        document.getElementById(
+            "winnerIcon"
+        );
+
+    const nameA =
+        document.getElementById(
+            "nameA"
+        ).value || "TEAM A";
+
+    const nameB =
+        document.getElementById(
+            "nameB"
+        ).value || "TEAM B";
+
+
+    document.getElementById(
+        "finalNameA"
+    ).textContent =
+        nameA.toUpperCase();
+
+
+    document.getElementById(
+        "finalNameB"
+    ).textContent =
+        nameB.toUpperCase();
+
+
+    document.getElementById(
+        "finalA"
+    ).textContent =
+        String(scoreA).padStart(2,"0");
+
+
+    document.getElementById(
+        "finalB"
+    ).textContent =
+        String(scoreB).padStart(2,"0");
+
+
+    document
+        .getElementById("teamA")
+        .classList.remove(
+            "winner",
+            "loser"
+        );
+
+    document
+        .getElementById("teamB")
+        .classList.remove(
+            "winner",
+            "loser"
+        );
+
+
+    if(scoreA > scoreB){
+
+        title.textContent =
+            "CONGRATULATIONS!";
+
+        text.textContent =
+            nameA.toUpperCase()
+            + " WINS";
+
+        icon.innerHTML =
+            '<i class="fa-solid fa-trophy"></i>';
+
+        document
+            .getElementById("teamA")
+            .classList.add("winner");
+
+        document
+            .getElementById("teamB")
+            .classList.add("loser");
+
+        createConfetti();
+
+    }
+
+    else if(scoreB > scoreA){
+
+        title.textContent =
+            "CONGRATULATIONS!";
+
+        text.textContent =
+            nameB.toUpperCase()
+            + " WINS";
+
+        icon.innerHTML =
+            '<i class="fa-solid fa-trophy"></i>';
+
+        document
+            .getElementById("teamB")
+            .classList.add("winner");
+
+        document
+            .getElementById("teamA")
+            .classList.add("loser");
+
+        createConfetti();
+
+    }
+
+    else{
+
+        title.textContent =
+            "WHAT A MATCH!";
+
+        text.textContent =
+            "IT'S A TIE";
+
+        icon.innerHTML =
+            '<i class="fa-solid fa-handshake"></i>';
+
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================
+   CLOSE WINNER
+========================= */
+
+function closeWinner(){
+
+    document
+        .getElementById(
+            "winnerModal"
+        )
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function setMatchStatus(
+    text
+){
+
+    document.getElementById(
+        "matchStatus"
+    ).textContent =
+        text;
+
+    document.getElementById(
+        "matchInfo"
+    ).textContent =
+        text;
+}
+
+
+function updateStatus(){
+
+    if(gameEnded) return;
+
+    if(scoreA === scoreB){
+
+        setMatchStatus(
+            "TIED"
+        );
+
+    }
+
+    else if(scoreA > scoreB){
+
+        setMatchStatus(
+            "A LEADS"
+        );
+
+    }
+
+    else{
+
+        setMatchStatus(
+            "B LEADS"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   CONFETTI
+========================= */
+
+function createConfetti(){
+
+    for(let i = 0; i < 70; i++){
+
+        const piece =
+            document.createElement(
+                "div"
+            );
+
+        piece.className =
+            "confetti";
+
+        piece.style.left =
+            Math.random() * 100 + "%";
+
+        piece.style.background =
+            [
+                "#45e6ff",
+                "#5cffad",
+                "#ffb84d",
+                "#ff5d6c",
+                "#ffffff"
+            ][
+                Math.floor(
+                    Math.random() * 5
+                )
+            ];
+
+        piece.style.animationDelay =
+            Math.random() * .8 + "s";
+
+        piece.style.transform =
+            `rotate(${Math.random()*360}deg)`;
+
+        document.body.appendChild(
+            piece
+        );
+
+        setTimeout(
+            ()=>piece.remove(),
+            3500
+        );
+
+    }
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetMatch(){
+
+    clearInterval(
+        timerInterval
+    );
+
+    timerInterval = null;
+
+    scoreA = 0;
+    scoreB = 0;
+
+    round = 1;
+
+    timeLeft = customTime;
+
+    gameEnded = false;
+
+
+    updateScore(
+        "scoreA",
+        0
+    );
+
+    updateScore(
+        "scoreB",
+        0
+    );
+
+
+    document.getElementById(
+        "round"
+    ).textContent = "01";
+
+
+    document
+        .getElementById("teamA")
+        .classList.remove(
+            "winner",
+            "loser"
+        );
+
+    document
+        .getElementById("teamB")
+        .classList.remove(
+            "winner",
+            "loser"
+        );
+
+
+    closeWinner();
+
+    updateTimer();
+
+    setMatchStatus(
+        "READY"
+    );
+
+    saveState();
+
+    beep(350);
+
+    setTimeout(
+        ()=>beep(650),
+        120
+    );
+
+}
+
+
+/* =========================
+   FULLSCREEN
+========================= */
+
+function toggleFullscreen(){
+
+    if(!document.fullscreenElement){
+
+        document
+            .documentElement
+            .requestFullscreen?.();
+
+    }
+
+    else{
+
+        document.exitFullscreen?.();
+
+    }
+
+}
+
+
+/* =========================
+   LOCAL STORAGE
+========================= */
+
+function saveState(){
+
+    const state = {
+
+        scoreA,
+        scoreB,
+        round,
+
+        customTime,
+        timeLeft,
+
+        nameA:
+            document.getElementById(
+                "nameA"
+            ).value,
+
+        nameB:
+            document.getElementById(
+                "nameB"
+            ).value
+
+    };
+
+    localStorage.setItem(
+        "stemScoreboard",
+        JSON.stringify(state)
+    );
+
+}
+
+
+function loadState(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                "stemScoreboard"
+            );
+
+        if(!saved) return;
+
+        const state =
+            JSON.parse(saved);
+
+        scoreA =
+            state.scoreA ?? 0;
+
+        scoreB =
+            state.scoreB ?? 0;
+
+        round =
+            state.round ?? 1;
+
+        customTime =
+            state.customTime ?? 60;
+
+        timeLeft =
+            state.timeLeft ?? customTime;
+
+
+        if(state.nameA){
+
+            document.getElementById(
+                "nameA"
+            ).value =
+                state.nameA;
+
+        }
+
+
+        if(state.nameB){
+
+            document.getElementById(
+                "nameB"
+            ).value =
+                state.nameB;
+
+        }
+
+
+        document.getElementById(
+            "minutes"
+        ).value =
+            Math.floor(
+                customTime / 60
+            );
+
+
+        document.getElementById(
+            "seconds"
+        ).value =
+            customTime % 60;
+
+
+        updateScore(
+            "scoreA",
+            scoreA
+        );
+
+        updateScore(
+            "scoreB",
+            scoreB
+        );
+
+
+        document.getElementById(
+            "round"
+        ).textContent =
+            String(round)
+                .padStart(2,"0");
+
+
+        updateTimer();
+
+        updateStatus();
+
+    }catch(e){
+
+        console.log(
+            "State load failed"
+        );
+
+    }
+
+}
+
+
+/* =========================
+   KEYBOARD SHORTCUTS
+========================= */
+
+/*
+Q = Team A +1
+A = Team A -1
+
+P = Team B +1
+L = Team B -1
+
+SPACE = Start
+R = Reset
+F = Fullscreen
+*/
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        const tag =
+            document.activeElement.tagName;
+
+        if(
+            tag === "INPUT" ||
+            tag === "TEXTAREA"
+        ){
+
+            return;
+
+        }
+
+
+        switch(
+            event.key.toLowerCase()
+        ){
+
+            case "q":
+                changeScore("A",1);
+                break;
+
+            case "a":
+                changeScore("A",-1);
+                break;
+
+            case "p":
+                changeScore("B",1);
+                break;
+
+            case "l":
+                changeScore("B",-1);
+                break;
+
+            case "r":
+                resetMatch();
+                break;
+
+            case "f":
+                toggleFullscreen();
+                break;
+
+        }
+
+
+        if(event.code === "Space"){
+
+            event.preventDefault();
+
+            if(timerInterval){
+
+                pauseTimer();
+
+            }
+
+            else{
+
+                startTimer();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================
+   INITIALIZE
+========================= */
+
+loadState();
+
+updateTimer();
+
+</script>
+
+</body>
+  </html>
