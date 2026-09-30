@@ -7,7 +7,7 @@ new HTML()
     HTML.bold("🚀 Latest Announcement")
   )
   .paragraph(
-    "Selamat datang di update terbaru Xilent Death."
+    "Selamat datang di update terbaru Xilent Death, Kali ini Xilent Death kolaborasi dengan Oxide."
   )
   .divider()
   .heading(
